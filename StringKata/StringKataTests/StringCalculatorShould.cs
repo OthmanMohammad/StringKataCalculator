@@ -54,7 +54,21 @@ namespace String_Calculator_Kata.Tests
         [InlineData("7, 9 , 1082,999", 2097)]
         [InlineData("0, 0,0, 0 ,0", 0)]
         [InlineData("1000, 2000, 3000, 4000", 10000)]
-        public void ShouldReturnCorrectSumOfAllNumbersIfStringContainsMoreThanOneNumber(string numbers, int expectedSum)
+        public void ShouldReturnCorrectSumOfAllNumbersIfStringContainsMoreThanOneNumberSeparatedByCommas(string numbers, int expectedSum)
+        {
+            //Act
+            var actual = this._stringCalculator.Add(numbers);
+
+            //Assert
+            Assert.Equal(expectedSum, actual);
+        }
+
+        [Theory]
+        [InlineData("1\n2,100\n105", 208)]
+        [InlineData("7, 9 \n 1082,999", 2097)]
+        [InlineData("0, 0\n0, 0 \n0", 0)]
+        [InlineData("1000, 2000\n 3000\n 4000", 10000)]
+        public void ShouldReturnCorrectSumOfAllNumbersIfStringContainsMoreThanOneNumberSeparatedByCommasOrNewLineCharacters(string numbers, int expectedSum)
         {
             //Act
             var actual = this._stringCalculator.Add(numbers);
