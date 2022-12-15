@@ -29,11 +29,24 @@ namespace StringKata.Tests
 
         [Theory]
         [MemberData(nameof(CustomDelimiterData.HasNoDelimiter), MemberType = typeof(CustomDelimiterData))]
-        //Checks that the ExtractDelimiter() method throws an ArgumentException if the calling String has no delimiter to be extracted.
-        public void ShouldThrowArgumentExceptionIfInputStringHasNoDelimiterToBeExtracted(string numbers)
+        //Checks that the ExtractDelimiter() method throws an ArgumentException with the correct error message if the calling String has no delimiter to be extracted.
+        public void ShouldThrowArgumentExceptionWithCorrectErrorMessageIfInputStringHasNoDelimiterToBeExtracted(string numbers)
         {
             //Assert
-            Assert.Throws<ArgumentException>(() => numbers.ExtractDelimiter());
+            var actual = Assert.Throws<ArgumentException>(() => numbers.ExtractDelimiter());
+            Assert.Equal("Invalid input! The input string you provided has no delimiters to be extracted.", actual.Message);
+        }
+
+        [Fact]
+        //Checks that the ExtractDelimiter() method throws a NotSupportedException with the correct error message if the calling String has a delimiter the same as the minus operator "-".
+        public void ShouldThrowANotSupportedExceptionWithCorrectErrorMessageIfDelimiterIsEqualToTheMinusOperator()
+        {
+            //Arrange
+            var numbers = "//-\n1-2-3-4-5-1094";
+
+            //Assert
+            var actual = Assert.Throws<NotSupportedException>(() => numbers.ExtractDelimiter());
+            Assert.Equal("The string: '-' is not a supported delimiter!", actual.Message);
         }
 
         [Theory]
@@ -41,7 +54,7 @@ namespace StringKata.Tests
         [InlineData("//;\n1;2;2;3", ";")]
         [InlineData("// \n1 2 2 3", " ")]
         [InlineData("//plus\n1 plus 2 plus 2 plus 3", "plus")]
-        //Checks that the ExtractDelimiter() method should return the correct delimiter if the calling String has a delimiter to be extracted.
+        //Checks that the ExtractDelimiter() method returns the correct delimiter if the calling String has a delimiter to be extracted.
         public void ShouldReturnCorrectDelimiterIfInputStringHasADelimiter(string numbers, string delimiter)
         {
             //Assert
